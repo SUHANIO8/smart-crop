@@ -112,7 +112,7 @@ const About = () => {
       </section>
 
       {/* ================= OUR STORY ================= */}
-      <section className="max-w-6xl mx-auto px-6 py-10"\]
+      <section className="max-w-6xl mx-auto px-6 py-10">
         <h2 className="text-4xl font-extrabold mb-8">Our Story</h2>
 
         <div className="space-y-1 text-lg text-[#5f7f73] leading-relaxed">
