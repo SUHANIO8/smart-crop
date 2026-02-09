@@ -1,6 +1,6 @@
+import api from "../services/api";
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
 // --- FIREBASE INTEGRATION ---
 import { ref, onValue } from "firebase/database";
 import { rtdb } from "../services/firebase";
@@ -42,11 +42,7 @@ const Input = ({ label, type = 'text', value, onChange, placeholder, className =
  * CONSOLIDATED SERVICES & UTILITIES
  */
 
-const apiInstance = axios.create({
-  baseURL: 'http://localhost:5000/api',
-  timeout: 15000,
-  headers: { 'Content-Type': 'application/json' }
-});
+
 
 const getEnv = (key) => {
   try {
@@ -175,7 +171,7 @@ export default function Predict() {
     setLoading(true);
     setError('');
     try {
-      const response = await apiInstance.post('/predict', {
+      const response = await api.post('/predict', {
         features: [
           Number(form.nitrogen), Number(form.phosphorus), Number(form.potassium),
           Number(form.temperature), Number(form.humidity),
