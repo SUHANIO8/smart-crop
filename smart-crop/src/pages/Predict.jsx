@@ -1,5 +1,6 @@
-import api from "../services/api";
+import api from "../utils/api";
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 // --- FIREBASE INTEGRATION ---
 import { ref, onValue } from "firebase/database";
