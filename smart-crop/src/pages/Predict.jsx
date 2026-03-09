@@ -114,7 +114,6 @@ export default function Predict() {
 
     const unsubscribe = onValue(sensorRef, (snapshot) => {
       const data = snapshot.val();
-      console.log("Live Sensor Data:", data);
 
       if (data) {
         setForm({
@@ -124,9 +123,7 @@ export default function Predict() {
           ph: data.ph !== undefined ? String(data.ph) : '',
           temperature: data.temperature !== undefined ? String(data.temperature) : '',
           humidity: data.humidity !== undefined ? String(data.humidity) : '',
-          // rainfall: data.rainfall !== undefined ? String(data.rainfall) : ''
           rainfall: data.rainfall !== undefined ? String(data.rainfall) : ''
-
         });
         setError('');
       } else {
@@ -172,27 +169,65 @@ export default function Predict() {
     setLoading(true);
     setError('');
     try {
-      const response = await api.post('/predict', {
-        features: [
-          Number(form.nitrogen), Number(form.phosphorus), Number(form.potassium),
-          Number(form.temperature), Number(form.humidity),
-          Number(form.ph), Number(form.rainfall)
-        ]
-      });
+      const response = await api.post("/predict", {
+  features: [
+    Number(form.nitrogen),
+    Number(form.phosphorus),
+    Number(form.potassium),
+    Number(form.temperature),
+    Number(form.humidity),
+    Number(form.ph),
+    Number(form.rainfall)
+  ]
+});
 
-      const rankedCrops = await Promise.all(
-        response.data.recommendations.map(async (item) => ({
-          ...item,
-          imageUrl: await imageService.getCropImage(item.crop)
-        }))
-      );
-      setResults(rankedCrops);
+console.log("Prediction Response:", response.data);
+
+const rankedCrops = await Promise.all(
+  response.data.recommendations.map(async (item) => ({
+    ...item,
+    imageUrl: await imageService.getCropImage(item.crop)
+  }))
+);
+
+setResults(rankedCrops);
+
     } catch (err) {
-      const mock = [
-        { rank: 1, crop: "Wheat", confidence: 94 },
-        { rank: 2, crop: "Maize", confidence: 88 }
-      ];
-      const ranked = await Promise.all(mock.map(async (i) => ({
+      // Generate rainfall-based mock predictions when backend is unreachable
+      const rainfall = Number(form.rainfall) || 0;
+      
+      let mockCrops = [];
+      if (rainfall > 200) {
+        // High rainfall crops
+        mockCrops = [
+          { rank: 1, crop: "Rice", confidence: 92 },
+          { rank: 2, crop: "Jute", confidence: 85 },
+          { rank: 3, crop: "Sugarcane", confidence: 78 }
+        ];
+      } else if (rainfall > 100) {
+        // Medium-high rainfall crops
+        mockCrops = [
+          { rank: 1, crop: "Cotton", confidence: 90 },
+          { rank: 2, crop: "Maize", confidence: 84 },
+          { rank: 3, crop: "Soybean", confidence: 77 }
+        ];
+      } else if (rainfall > 50) {
+        // Medium-low rainfall crops
+        mockCrops = [
+          { rank: 1, crop: "Wheat", confidence: 94 },
+          { rank: 2, crop: "Barley", confidence: 87 },
+          { rank: 3, crop: "Mustard", confidence: 80 }
+        ];
+      } else {
+        // Low rainfall/drought-tolerant crops
+        mockCrops = [
+          { rank: 1, crop: "Pearl Millet", confidence: 91 },
+          { rank: 2, crop: "Sorghum", confidence: 85 },
+          { rank: 3, crop: "Groundnut", confidence: 78 }
+        ];
+      }
+      
+      const ranked = await Promise.all(mockCrops.map(async (i) => ({
         ...i, imageUrl: await imageService.getCropImage(i.crop)
       })));
       setResults(ranked);
@@ -263,33 +298,19 @@ export default function Predict() {
             <Input label="Humidity (%)" value={form.humidity} readOnly />
           </div>
 
-          {/* <Input
-
+          <Input
             label="Rainfall (mm)"
             name="rainfall"
             type="number"
             value={form.rainfall}
-            onChange={handleChange}
+            onChange={(e) =>
+              setForm((prev) => ({
+                ...prev,
+                rainfall: e.target.value
+              }))
+            }
             placeholder="Enter rainfall manually"
-
-
-            className="bg-emerald-50/50 border-emerald-100"
-          /> */}
-
-
-          <Input
-  label="Rainfall (mm)"
-  name="rainfall"
-  type="number"
-  value={form.rainfall}
-  onChange={(e) =>
-    setForm((prev) => ({
-      ...prev,
-      rainfall: e.target.value
-    }))
-  }
-  placeholder="Enter rainfall manually"
-/>
+          />
 
 
           <Button

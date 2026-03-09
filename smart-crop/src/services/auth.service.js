@@ -1,7 +1,8 @@
 
 import api from '../utils/api.js' // used when USE_MOCK = false
 
-const USE_MOCK = true; // switch to false to use the real backend
+// Configure mock mode via environment variable (default: true for development)
+const USE_MOCK = import.meta.env.VITE_USE_MOCK !== 'false';
 
 const authService = {
   /**
