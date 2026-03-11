@@ -6,7 +6,6 @@ import AppRoutes from "./routes/AppRoutes.jsx";
 
 function AnimatedRoutesWrapper() {
   const location = useLocation();
-
   return (
     <AnimatePresence mode="wait" initial={false}>
       <AppRoutes location={location} />

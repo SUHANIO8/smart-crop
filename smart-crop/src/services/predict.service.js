@@ -1,44 +1,34 @@
-// Mock prediction service - in a real app, this would make API calls to ML models
+import axios from 'axios';
+
+const getBaseUrl = () => import.meta.env?.VITE_API_BASE_URL || 'http://localhost:5000';
 
 export const predictService = {
-  async predictYield(formData) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
+  /**
+   * Calls the real Flask ML model at /predict
+   * Feature order: N, P, K, temperature, humidity, ph, rainfall
+   * Returns: { recommendations: [{rank, crop, confidence}] }
+   */
+  async getCropRecommendation({ nitrogen, phosphorus, potassium, temperature, humidity, ph, rainfall }) {
+    const features = [
+      Number(nitrogen),
+      Number(phosphorus),
+      Number(potassium),
+      Number(temperature),
+      Number(humidity),
+      Number(ph),
+      Number(rainfall),
+    ];
 
-    // Mock prediction logic based on input data
-    const baseYield = 2.5 // tons per acre
-    const cropMultiplier = {
-      'wheat': 1.0,
-      'rice': 1.2,
-      'corn': 1.5,
-      'soybean': 1.1
-    }
+    const response = await axios.post(
+      `${getBaseUrl()}/predict`,
+      { features },
+      {
+        timeout: 8000,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
 
-    const soilMultiplier = {
-      'clay': 0.9,
-      'sandy': 1.1,
-      'loam': 1.0
-    }
-
-    const seasonMultiplier = {
-      'kharif': 1.0,
-      'rabi': 0.8
-    }
-
-    const cropType = formData.cropType.toLowerCase()
-    const soilType = formData.soilType.toLowerCase()
-    const season = formData.season.toLowerCase()
-
-    const multiplier = (cropMultiplier[cropType] || 1.0) *
-                      (soilMultiplier[soilType] || 1.0) *
-                      (seasonMultiplier[season] || 1.0)
-
-    const predictedYield = baseYield * multiplier * (0.8 + Math.random() * 0.4) // Add some randomness
-    const confidence = Math.floor(85 + Math.random() * 10) // 85-95% confidence
-
-    return {
-      yield: predictedYield.toFixed(2),
-      confidence: confidence
-    }
-  }
-}
+    // Flask returns: { status, total_recommendations, recommendations: [{rank, crop, confidence}] }
+    return response.data;
+  },
+};

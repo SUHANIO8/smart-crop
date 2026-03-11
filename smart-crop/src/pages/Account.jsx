@@ -11,7 +11,6 @@ const Account = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // In a real app, this would update the user data via API
     setMessage('Profile updated successfully!')
     setTimeout(() => setMessage(''), 3000)
   }
