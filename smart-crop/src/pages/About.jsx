@@ -38,7 +38,7 @@ const About = () => {
           </div>
           <h3 className="text-2xl font-bold mb-4">Our Team</h3>
           <p className="text-[#5f7f73] leading-relaxed">
-            A diverse group of agronomists, engineers, and data scientists
+            A diverse group of  engineers
             dedicated to solving real-world agricultural challenges with
             innovative technology.
           </p>
@@ -111,47 +111,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* ================= OUR STORY ================= */}
-      <section className="max-w-6xl mx-auto px-6 py-10">
-        <h2 className="text-4xl font-extrabold mb-8">Our Story</h2>
-
-        <div className="space-y-1 text-lg text-[#5f7f73] leading-relaxed">
-          <p>
-            SmartCrop was founded in 2020 by a team of agricultural engineers and
-            data scientists who recognized the critical need for real-time soil
-            monitoring in modern farming.
-          </p>
-
-          <p>
-            Traditional farming methods often rely on guesswork and periodic manual
-            testing, leading to inefficient resource use and suboptimal crop yields.
-          </p>
-
-          <p>
-            Our breakthrough came when we developed a network of wireless soil
-            sensors capable of continuously monitoring multiple parameters including
-            moisture levels, temperature, pH balance, and nutrient content.
-          </p>
-
-          <p>
-            This data is transmitted in real-time to our cloud platform, where
-            advanced analytics transform raw measurements into actionable farming
-            insights.
-          </p>
-
-          <p>
-            Today, SmartCrop serves farms across multiple continents, helping growers
-            make informed decisions about irrigation, fertilization, and crop
-            management.
-          </p>
-
-          <p>
-            We continue to innovate, expanding our sensor capabilities and refining
-            our analytics algorithms to address the evolving challenges of
-            sustainable agriculture in a changing climate.
-          </p>
-        </div>
-      </section>
+     
     </div>
   );
 };

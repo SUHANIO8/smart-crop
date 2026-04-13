@@ -1,6 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useAuth } from "../hooks/useAuth";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
@@ -16,6 +17,8 @@ const stagger = {
 };
 
 const Home = () => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   return (
     <div className="font-sans text-slate-800 overflow-hidden">
 
@@ -52,16 +55,15 @@ const Home = () => {
               data intelligence.
             </p>
 
-            <Link to="/register">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
+                onClick={() => navigate(isAuthenticated ? '/predict' : '/login')}
                 className="bg-[#2d8a5b] hover:bg-[#24704a] text-white px-10 py-4 rounded-full font-semibold text-lg flex items-center gap-3 shadow-md"
               >
-                get recommendations
+                {isAuthenticated ? 'Get AI recommendations' : ' get recommendations'}
                 {/* <span className="text-xl">→</span> */}
               </motion.button>
-            </Link>
           </motion.div>
 
         </div>
@@ -161,16 +163,15 @@ const Home = () => {
               crops for your soil and weather conditions.
             </p>
 
-            <Link to="/predict">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.97 }}
+                onClick={() => navigate(isAuthenticated ? '/predict' : '/login')}
                 className="bg-[#2d8a5b] hover:bg-[#24704a] text-white px-10 py-4 rounded-full font-semibold text-lg flex items-center gap-3 shadow-md"
               >
-                Try Prediction
+                {isAuthenticated ? 'Start Prediction' : 'Sign in to predict'}
                 <span className="text-xl">→</span>
               </motion.button>
-            </Link>
           </motion.div>
 
           {/* Right Steps */}
