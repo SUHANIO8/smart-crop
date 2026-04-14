@@ -61,7 +61,7 @@ const Home = () => {
                 onClick={() => navigate(isAuthenticated ? '/predict' : '/login')}
                 className="bg-[#2d8a5b] hover:bg-[#24704a] text-white px-10 py-4 rounded-full font-semibold text-lg flex items-center gap-3 shadow-md"
               >
-                {isAuthenticated ? 'Get AI recommendations' : ' get recommendations'}
+                {isAuthenticated ? 'Get AI recommendations' : ' Get recommendations'}
                 {/* <span className="text-xl">→</span> */}
               </motion.button>
           </motion.div>
